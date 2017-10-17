@@ -1,0 +1,2 @@
+cd "Рабочий стол"/TEST_LED_SDK_1_1-1.0.0-0-w"
+make && make load
