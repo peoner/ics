@@ -6,10 +6,10 @@
 
 void InitCounter(void ){
 
-	TMOD |= ~T0_GATE |  T0_CT|	T0_M0 | ~T1_M1;
+	TMOD |= ~T0_GATE |  T0_CT|	T0_M0 | ~T0_M1;
 	TH0 = 0x0;
 	TL0 = 0x0;
-
+	TCON = 0x04;
 	//Intrrupt Enable Regs
 	//Enable Timer1 interrupts
 	ET0 = 1;
@@ -20,5 +20,5 @@ void InitCounter(void ){
 }
 
 unsigned long GetCounterVal (void){
-	return (TH0 << 8);
+	return (TH0 << 8) | (TL0);
 }
