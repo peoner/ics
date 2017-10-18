@@ -70,6 +70,9 @@ term:
 LIST_SRC = \
 $(SRC_DIR)/led.c \
 $(SRC_DIR)/max.c \
+$(SRC_DIR)/timer.c \
+$(SRC_DIR)/common.c \
+$(SRC_DIR)/counter.c \
 $(SRC_DIR)/main.c
 
 LIST_OBJ = $(LIST_SRC:.c=.rel)

@@ -1,2 +1,2 @@
 
-void SetVector(unsigned char xdata * Addres, void * Vector);
+void SetVector(unsigned char __xdata * Addres, void * Vector);

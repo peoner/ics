@@ -2,29 +2,57 @@
 #include "led.h"
 #include "max.h"
 #include "timer.h"
+#include "counter.h"
 #include "common.h"
 
+char mod = 1;
 
-unsigned char dip()
-{
-	return read_max(EXT_LO);
+void IE1_ISR() __interrupt( IE1_VECTOR ){
+	mod = ~mod;
 }
-
-char wrkSt;
-
-
 
 #define LAB_DIP_VALUE 0x55
 #define MAX_TICKS 6
-void main( void ){
+void main( ){
 
-	SetVector(0x200B, (void *) T0_ISR)
+    char i = 0, n = 0, br = 0;
+    char inc = 1, leds_old = 0, new_led;
 
 	InitLed();
 	InitTimer();
+	InitCounter();
 
+	SetVector(0x2013, (void *) IE1_ISR);
 
+	i = 0;
+	leds(leds_old);
 	while(1){
-		if()
+		if(mod){
+	        for(n = 0; n < 7; n++)
+	            if(n < 4)
+	                led(n, br);
+	            else
+	                led(n, 100 - br);
+
+	        if (inc)
+	            br += 100 / 10;
+	        else
+	            br -= 100 / 10;
+
+	        DelayMs(1000);
+
+			if(i == 9){
+	        	inc = ~inc;
+				i = 0;
+			}else
+				i++;
+		} else{
+			new_led = GetCounterVal();
+			if(new_led != leds_old){
+				leds_old = new_led;
+				leds(leds_old);
+			}
+			DelayMs(100);
+		}
 	}
 }

@@ -1,4 +1,5 @@
-
+#ifndef __TIMER__H
+#define __TIMER__H
 //Timer initialization
 void InitTimer(void);
 
@@ -10,3 +11,4 @@ unsigned long DTimeMs(unsigned long t0);
 
 //#t Ms delay
 void DelayMs(unsigned long t);
+#endif //
