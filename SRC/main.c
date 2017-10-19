@@ -7,9 +7,10 @@
 
 char mod = 1;
 
+/*
 void IE1_ISR() __interrupt( IE1_VECTOR ){
 	mod = ~mod;
-}
+}*/
 
 #define LAB_DIP_VALUE 0x55
 #define MAX_TICKS 6
@@ -20,15 +21,15 @@ void main( ){
 
 	InitLed();
 	InitTimer();
-	InitCounter();
-
-	SetVector(0x2013, (void *) IE1_ISR);
+	//InitCounter();
+	//SetVector(0x2013, (void *) IE1_ISR);
 
 	i = 0;
 	leds(leds_old);
+	T2CON = 0x05;
 	while(1){
 		if(mod){
-	        for(n = 0; n < 7; n++)
+	        for(n = 0; n < 8; n++)
 	            if(n < 4)
 	                led(n, br);
 	            else
@@ -38,8 +39,10 @@ void main( ){
 	            br += 100 / 10;
 	        else
 	            br -= 100 / 10;
-
-	        DelayMs(1000);
+			leds(0xf0);
+	        DelayMs(100);
+			leds(0x0f);
+			return;
 
 			if(i == 9){
 	        	inc = ~inc;
