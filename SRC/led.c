@@ -3,26 +3,27 @@
 #include "common.h"
 
 //период
-const unsigned char T = 64;
+const unsigned char T = 16;
 //яркость диодов
-unsigned char led_st[8];
+volatile unsigned char led_st[8];
+unsigned char led_bit[8] = {1,2,4,8,16,32,64,128};
 //текущее состояние t
 unsigned char ti = 1;
 
-const unsigned char ledON[] = {1, 2, 4, 8, 16, 32, 64, 128};
-unsigned char l = 0;
-unsigned char i = 0;
+
 
 void T1_ISR(void) __interrupt( TF1_VECTOR ){
-
-	for (l = 0, i =0; i < 8; i++) {
+    unsigned char l = 0, i =0;
+	for (; i < 8; i++) {
 		if(ti < led_st[i]){
-			l |= 1 << i;
+			l |= led_bit[i];
 		}
 	}
 	write_max(SV, l);
 	ti ++;
-    if(ti == 64)
+    TH1 = 0xFF;
+	TL1 = 0x0;
+    if(ti == T)
         ti = 1;
 }
 
@@ -32,10 +33,9 @@ void InitLed(){
 	/*T1_GATE = 0; T1_CT = 0;
 	T1_M0 = 0; T1_M1 = 1;*/
 
-	TMOD |= T1_M1;
+	TMOD |= T1_M0;
 
-	TH1 = 0xA0;
-	TL1 = 0xA0;
+
 
 	//Intrrupt Enable Regs
 	//Enable Timer1 interrupts
